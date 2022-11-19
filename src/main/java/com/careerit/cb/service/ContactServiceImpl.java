@@ -2,6 +2,7 @@ package com.careerit.cb.service;
 
 import com.careerit.cb.domain.Contact;
 import com.careerit.cb.dto.ContactDto;
+import com.careerit.cb.exception.ContactAlreadyExistsException;
 import com.careerit.cb.util.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,10 @@ public class ContactServiceImpl implements  ContactService {
   public ContactDto addContact(ContactDto contactDto) {
     Assert.hasText(contactDto.getName(),"Name can't be null or empty");
     Assert.hasText(contactDto.getMobile(),"Mobile number can't be null or empty");
+    Optional<Contact> optContact = storageService.getContactByMobile(contactDto.getMobile());
+    if(optContact.isPresent()){
+        throw new ContactAlreadyExistsException("Contact with given mobile already exists");
+    }
     Contact contact = objectMapper.convertValue(contactDto, Contact.class);
     contact = storageService.save(contact);
     contactDto = objectMapper.convertValue(contact, ContactDto.class);

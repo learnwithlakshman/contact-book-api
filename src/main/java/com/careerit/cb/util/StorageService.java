@@ -43,4 +43,9 @@ public class StorageService {
         .filter(c -> c.getName().toLowerCase().contains(str.toLowerCase()) || c.getMobile().contains(str) || c.getCity().toLowerCase().contains(str.toLowerCase()))
         .collect(Collectors.toList());
   }
+
+  public Optional<Contact> getContactByMobile(String mobile){
+      // Logic
+     return Optional.empty();
+  }
 }
